@@ -1,0 +1,104 @@
+package gepkocsik;
+
+import java.time.LocalDate;
+
+public class Gepkocsi {
+    String rendszam;
+    int evjarat;
+    int eredeitAr;
+    Allapot allapot;
+
+
+    static String betuk = "QWERTZUIOPASDFGHJKLYXCVBNM";
+    static  String szamok = "0123456789";
+    public String getRendszam() {
+        return rendszam;
+    }
+
+    private void setRendszam(String rendszam) throws Exception {
+        if(rendszam.length() !=7) throw  new Exception();
+        for(int i = 0; i < 3; i++){
+            if(!betuk.contains(rendszam.substring(i,i))){
+                throw new Exception();
+            }
+        }
+        if(rendszam.charAt(3) != '-'){
+            throw new Exception();
+        }
+        for(int i = 4; i < 7; i++){
+            if(!szamok.contains(rendszam.substring(i,i))){
+                throw new Exception();
+            }
+        }
+        this.rendszam = rendszam;
+    }
+
+    public int getEvjarat() {
+        return evjarat;
+    }
+
+    private void setEvjarat(int evjarat) throws Exception {
+        if(evjarat < 1950 || evjarat > LocalDate.now().getYear()){
+            throw new Exception();
+        }
+
+        this.evjarat = evjarat;
+    }
+
+    public int getEredeitAr() {
+        return eredeitAr;
+    }
+
+    private void setEredeitAr(int eredeitAr) throws  Exception {
+        if(eredeitAr < 300000 || eredeitAr > 12000000){
+            throw  new Exception();
+        }
+        this.eredeitAr = eredeitAr;
+    }
+
+    public Allapot getAllapot() {
+        return allapot;
+    }
+
+    public void setAllapot(Allapot allapot) {
+        this.allapot = allapot;
+    }
+
+    public int getKor() {
+        return LocalDate.now().getYear() - evjarat;
+    }
+
+    public int getExtraAr(){
+        int val = 0;
+        if(getKor() <= 2 && allapot == Allapot.UJSZERU){
+            val = eredeitAr / 100 * 2;
+        }
+        return val;
+    }
+
+    public Gepkocsi(String rendszam, int evjarat, int eredeitAr, Allapot allapot) throws Exception{
+        setAllapot(allapot);
+        setEvjarat(evjarat);
+        setEredeitAr(eredeitAr);
+        setRendszam(rendszam);
+
+    }
+
+    public Gepkocsi(String rendszam, int evjarat, int eredeitAr) throws Exception {
+        this(rendszam,evjarat,eredeitAr,Allapot.MEGKIMELT);
+    }
+
+    public int getVetelAr(){
+        int val = 0;
+        switch (allapot){
+            case UJSZERU:
+                break;
+            case MEGKIMELT:
+                break;
+            case SERULT:
+                break;
+            case HIBAS:
+                break;
+        }
+    }
+}
